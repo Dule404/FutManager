@@ -1,0 +1,172 @@
+@model FutManager.Models.ViewModels.HomeViewModel
+@{
+    Layout = "../Shared/_Layout.cshtml";
+    var arr = Shared.Enums.FieldPositions.GetNames(typeof(Shared.Enums.FieldPositions));
+}
+
+<div class="main">
+    <div class="columnFlex borderLine">
+        <h1 class="sqParagraph">Squad Manager</h1>
+        <p class="drop">Add Squad</p>
+        <div class="addSquad displayNone">
+            <input id="squadName" placeholder="Name"/>
+            <input id="squadBalance" placeholder="Balance" type="number" min="0"/>
+            <button id="squadAdd">Add</button>
+        </div>
+        <p class="drop">Manage Squad</p>
+        <div class="manageSquad displayNone">
+            <button id="previousSquads">&lt</button>
+            <div id="shlSquads" class="showList">
+                @{
+                    if (Model.Squads != null)
+                    {
+                        foreach (var squad in Model.Squads)
+                        {
+                            <div class="borderLine">
+                                <p>Name: @squad.Name</p>
+                                <p>Balance: @squad.Balance</p>
+                                <input id="deleteID" type="hidden" value="@squad.Id"/>
+                                <button id="changeSquad">Change</button>
+                                <button id="deleteSquad">Delete</button>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+            <button id="nextSquads">&gt</button>
+        </div>
+        <p class="drop">Add Player</p>
+        <div class="addPlayer displayNone">
+            <input id="playerName" placeholder="First name" />
+            <input id="playerLName" placeholder="Last name" />
+            <input id="playerRating" placeholder="Rating" type="number" min="0" />
+            <input id="playerAge" placeholder="Age" type="number" min="16" />
+            <input id="playerNationality" placeholder="Nationality" />
+            <input id="playerSquad" placeholder="Squad" />
+            <select id="playerPosition">
+                @{ 
+                    for (int i = 0; i < arr.Length; i++)
+                    {
+                        <option value="@i">@arr[i]</option>
+                    }
+                }
+            </select>
+            <button id="playerAdd">Add</button>
+        </div>
+        <p class="drop">Manage Player</p>
+        <div class="managePlayer displayNone">
+            <button id="previousPlayers">&lt</button>
+            <div id="shlPlayers" class="showList">
+                @{
+                    if (Model.Players != null)
+                    {
+                        foreach (var player in Model.Players)
+                        {
+                            <div class="borderLine">
+                                <p>Name: @player.FirstName</p>
+                                <p>Rating: @player.OverallRating</p>
+                                <p>Nationality: @player.Nationality</p>
+                                <input id="deleteID" type="hidden" value="@player.Id"/>
+                                <button id="changePlayer">Change</button>
+                                <button id="deletePlayer">Delete</button>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+            <button id="nextPlayers">&gt</button>
+        </div>
+    </div>
+    <div class="matchmaking columnFlex borderLine">
+        <h1>Matchmaking</h1>
+        <p class="drop">Start Practice Simulation</p>
+        <div class="startFriendlyMatch displayNone ">
+            <button onclick="startPractice()">Start Practice</button>
+        </div>    
+        
+        <div>
+            <p class="drop">Schedule Friendly</p>
+            <div class="startFriendlyMatch displayNone">
+                <input type="datetime-local" id="meeting-time"
+                       name="match-time"
+                       min="2023-01-01T00:00" max="2024-01-01T00:00">
+                <button onclick="scheduleFriendly()">Schedule Friendly</button>
+            </div>    
+        </div>
+    </div>
+    <div class="matches borderLine">
+        <h1>Currently Live Matches</h1>
+        @{
+            if (Model.LiveMatches != null)
+            {
+                foreach (var liveMatch in Model.LiveMatches)
+                {
+                    <a href="@Url.Action("Index", "LiveMatch", new { channel = liveMatch.Channel })">@liveMatch.Channel</a>
+                }
+            }
+        }
+    </div>
+    
+    <div class="overlay">
+        <div id="popupPlayer" class="popup">
+            <input type="hidden"/>
+            <label>First Name:</label>
+            <input id="changePlayerName" />
+            <label>Last Name:</label>
+            <input id="changePlayerLName" />
+            <label>Rating:</label>
+            <input id="changePlayerRating" type="number" />
+            <label>Age:</label>
+            <input id="changePlayerAge" type="number"/>
+            <label>Nationality:</label>
+            <input id="changePlayerNationality" />
+            <label>Squad:</label>
+            <input id="changePlayerSquad" />
+            <label>Position:</label>
+            <select id="changePlayerPosition">
+                @{
+                    for (int i = 0; i < arr.Length; i++)
+                    {
+                        <option value="@i">@arr[i]</option>
+                    }
+                }
+            </select>
+            <button id="updatePlayer">Confirm</button>
+            <button id="cancelBtnPlayers">Cancel</button>
+        </div>
+        <div id="popupSquad" class="popup">
+            <input type="hidden" />
+            <label>Name:</label>
+            <input id="changeSquadName" />
+            <label>Balance:</label>
+            <input id="changeSquadBalance" type="number" />
+            <p class="drop">Add Player To Squad</p>
+            <div class="managePlayer displayNone">
+                <button id="previousPlayers">&lt</button>
+                <div id="shlPlayers" class="showList">
+                    @{
+                        if (Model.Players != null)
+                        {
+                            foreach (var player in Model.Players)
+                            {
+                                <div class="borderLine">
+                                    <p>Name: @player.FirstName</p>
+                                    <p>Rating: @player.OverallRating</p>
+                                    <p>Nationality: @player.Nationality</p>
+                                    <input id="addID" type="hidden" value="@player.Id" />
+                                    <button id="addPlayer">Add</button>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+                <button id="nextPlayers">&gt</button>
+            </div>
+
+            <button id="updateSquad">Confirm</button>
+            <button id="cancelBtnSquads">Cancel</button>
+        </div>
+    </div>
+
+</div>
+<script src="scripts/home.js"></script>

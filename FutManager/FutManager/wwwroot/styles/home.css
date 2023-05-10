@@ -1,0 +1,66 @@
+﻿body {
+}
+input
+{
+    width:30%
+}
+select, option
+{
+    width:30%
+}
+button
+{
+    width:20%;
+}
+.main {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.columnFlex {
+    display: flex;
+    flex-direction: column;
+    width: 33%;
+}
+
+.matches {
+    width: 40%;
+}
+
+.sqParagraph {
+    align-content: center;
+}
+
+.displayNone {
+    display: none;
+}
+
+.displayFlex {
+    display: flex;
+}
+
+.drop {
+    cursor: pointer;
+}
+
+.addPlayer,
+.addSquad {
+    flex-direction: column;
+    align-content: center;
+    justify-content: space-between
+}
+.managePlayer,
+.manageSquad {
+
+}
+
+.showList{
+    width:90%;
+}
+
+.borderLine{
+    border: 2px solid black;
+    border-radius:10px;
+    background-color:darkgray;
+}
